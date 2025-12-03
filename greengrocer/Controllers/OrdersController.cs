@@ -1,9 +1,9 @@
-﻿using System.Linq;
-using greengrocer.Data;
-using Microsoft.AspNetCore.Authorization;
+﻿using System.Threading.Tasks;
+using greengrocer.Models;
+using greengrocer.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace greengrocer.Controllers
 {
@@ -12,36 +12,30 @@ namespace greengrocer.Controllers
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class OrdersController : ControllerBase
     {
-        private readonly AppDbContext _db;
+        private readonly IOrderService _service;
 
-        public OrdersController(AppDbContext db)
+        public OrdersController(IOrderService service)
         {
-            _db = db;
+            _service = service;
         }
 
         // GET: /api/orders
         [HttpGet]
-        public IActionResult GetOrders()
+        public async Task<IActionResult> GetOrders()
         {
-            var data = _db.Orders
-                .Include(o => o.Items)
-                .Select(o => new
-                {
-                    id = o.Id,
-                    orderName = o.OrderName,
-                    totalQty = o.Items.Sum(i => i.Quantity),
-
-                    items = o.Items.Select(i => new { title = i.Title, quantity = i.Quantity }),
-        
-        itemsText = string.Join(
-                        ", ",
-                        o.Items.Select(i => i.Title + " (x" + i.Quantity + ")")
-                    )
-                })
-                .ToList();
-
-
+            var data = await _service.GetAllAsync();
             return Ok(data);
+        }
+
+        // POST: /api/orders
+        [HttpPost]
+        public async Task<IActionResult> Post([FromBody] OrderCreateDto dto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var result = await _service.CreateAsync(dto);
+            return Ok(result);
         }
     }
 }

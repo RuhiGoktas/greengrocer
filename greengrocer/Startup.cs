@@ -16,10 +16,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-
-
-
-
+using greengrocer.Repositories;
+using greengrocer.Services;
+using Microsoft.Extensions.Configuration;
+using greengrocer.Models;
 
 namespace greengrocer
 {
@@ -74,6 +74,9 @@ namespace greengrocer
                     .Build();
                 options.Filters.Add(new AuthorizeFilter(policy));
             });
+            services.Configure<LoginOptions>(Configuration.GetSection("LoginOptions"));
+            services.AddScoped<IOrderRepository, OrderRepository>();
+            services.AddScoped<IOrderService, OrderService>();
 
         }
 

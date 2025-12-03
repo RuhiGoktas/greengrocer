@@ -7,24 +7,23 @@
 <h2>Login</h2>
 
 <form method="post">
-    <div>
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+    <div class="form-group">
         <label asp-for="Input.Username"></label>
-        <input asp-for="Input.Username" />
-        <span asp-validation-for="Input.Username"></span>
+        <input asp-for="Input.Username" class="form-control" />
+        <span asp-validation-for="Input.Username" class="text-danger"></span>
     </div>
 
-    <div>
+    <div class="form-group">
         <label asp-for="Input.Password"></label>
-        <input asp-for="Input.Password" type="password" />
-        <span asp-validation-for="Input.Password"></span>
+        <input asp-for="Input.Password" class="form-control" type="password" />
+        <span asp-validation-for="Input.Password" class="text-danger"></span>
     </div>
 
-    <button type="submit">Login</button>
-
-    <div style="color:red">
-        @Model.ErrorMessage
-    </div>
+    <button type="submit" class="btn btn-primary btn-block">Login</button>
 </form>
+
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

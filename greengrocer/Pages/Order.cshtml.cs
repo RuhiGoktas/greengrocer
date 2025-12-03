@@ -20,11 +20,9 @@ namespace greengrocer.Pages
             _db = db;
         }
 
-        // ViewModel for the form
         [BindProperty]
         public OrderInput Input { get; set; }
 
-        // Orders from DB
         public List<Order> ExistingOrders { get; set; }
 
         public string Message { get; set; }
@@ -49,7 +47,6 @@ namespace greengrocer.Pages
 
         public void OnGet()
         {
-            // start with an empty order (no rows yet)
             Input = new OrderInput
             {
                 Items = new List<OrderItemInput>()
@@ -62,46 +59,7 @@ namespace greengrocer.Pages
 
         public void OnPost()
         {
-            ExistingOrders = _db.Orders
-                .Include(o => o.Items)
-                .ToList();
 
-            if (!ModelState.IsValid)
-            {
-                return;
-            }
-
-            // Map ViewModel to Entity
-            var items = (Input.Items ?? new List<OrderItemInput>())
-                .Where(i => !string.IsNullOrWhiteSpace(i.Title))
-                .Select(i => new OrderItem
-                {
-                    Title = i.Title,
-                    Quantity = i.Quantity
-                })
-                .ToList();
-
-            var order = new Order
-            {
-                OrderName = Input.OrderName,
-                Items = items
-            };
-
-            _db.Orders.Add(order);
-            _db.SaveChanges();
-
-            Message = "Order saved. Item count: " + order.Items.Count;
-
-            // reload list including the newly saved order
-            ExistingOrders = _db.Orders
-                .Include(o => o.Items)
-                .ToList();
-
-            // reset form (empty again)
-            Input = new OrderInput
-            {
-                Items = new List<OrderItemInput>()
-            };
         }
 
         private OrderInput CreateEmptyOrder()

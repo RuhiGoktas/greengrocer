@@ -14,7 +14,7 @@
                     <h5 class="mb-0">Yeni Sipariş</h5>
                 </div>
                 <div class="card-body">
-                    <form method="post">
+                    <form id="orderForm">
                         <div class="form-group">
                             <label asp-for="Input.OrderName" class="font-weight-bold"></label>
                             <input asp-for="Input.OrderName" class="form-control" />
@@ -55,7 +55,7 @@
                         <input type="hidden" id="itemIndex" value="@(Model.Input.Items?.Count ?? 0)" />
 
 
-                        <button type="submit" class="btn btn-primary btn-block">Kaydet</button>
+                        <button type="button" id="btnSaveOrder" class="btn btn-primary btn-block">Kaydet</button>
 
                         @if (!string.IsNullOrEmpty(Model.Message))
                         {
@@ -111,8 +111,6 @@
             <div class="col-6 col-md-4 col-lg-2 mb-3 pr-2">
                 <div class="product-card">
                     <img src="~/images/avakado.png" class="img-fluid" alt="Avokado Yerli Adet" />
-                    <div class="product-badge">Payfour Ödeme ile 9,90 TL</div>
-
                     <div class="font-weight-bold mb-2">Avokado Yerli Adet</div>
 
                     <div class="product-yellow-strip">
@@ -235,7 +233,6 @@
     <partial name="_ValidationScriptsPartial" />
 
     <script>
-        // Formdaki satırları dinamik ekleme
         function addItemRow(title) {
             var index = parseInt($('#itemIndex').val() || '0');
 
@@ -258,7 +255,6 @@
             $('#itemIndex').val(index + 1);
         }
 
-        // Meyve kartından sepete ekle
         $(function () {
             $('.add-to-order').on('click', function (e) {
                 e.preventDefault();
@@ -266,13 +262,11 @@
                 addItemRow(title);
             });
 
-            // Satır sil
             $('#orderItemsBody').on('click', '.delete-row', function () {
                 $(this).closest('tr').remove();
                 reindexRows();
             });
 
-            // Satırlar silindikçe indexleri düzelt
             function reindexRows() {
                 var rows = $('#orderItemsBody tr');
                 rows.each(function (i, row) {
@@ -288,7 +282,9 @@
     </script>
 
     <script>
-        // 1️⃣ JWT token'ı backend'den alan helper
+        var jwtToken = null;
+        var ordersGrid = null;
+
         function getJwtToken() {
             return $.ajax({
                 url: "/api/auth/token",
@@ -298,21 +294,18 @@
             });
         }
 
-        // 2️⃣ Token geldikten sonra DevExtreme grid'i kur
         getJwtToken().done(function (result) {
             console.log("TOKEN:", result);
+            jwtToken = result.token;
 
-            const token = result.token;
-
-            $("#dxOrdersGrid").dxDataGrid({
+            // DevExtreme grid
+            ordersGrid = $("#dxOrdersGrid").dxDataGrid({
                 dataSource: DevExpress.data.AspNet.createStore({
                     key: "id",
                     loadUrl: "/api/orders",
-
-                    // 🔥 DOĞRU HOOK: onBeforeSend(method, ajaxOptions)
                     onBeforeSend: function (method, ajaxOptions) {
                         ajaxOptions.headers = ajaxOptions.headers || {};
-                        ajaxOptions.headers["Authorization"] = "Bearer " + token;
+                        ajaxOptions.headers["Authorization"] = "Bearer " + jwtToken;
                         console.log("onBeforeSend →", method, ajaxOptions.headers);
                     }
                 }),
@@ -328,12 +321,78 @@
                         dataField: "itemsText",
                         caption: "İçindekiler"
                     }
-
-                    
                 ]
-            });
+            }).dxDataGrid("instance");
+
+            hookSaveButton();
         });
+
+        function hookSaveButton() {
+            $("#btnSaveOrder").on("click", function () {
+                if (!jwtToken) {
+                    alert("Token alınamadı, lütfen sayfayı yenileyin.");
+                    return;
+                }
+
+                var payload = {
+                    orderName: $("#Input_OrderName").val(),
+                    items: []
+                };
+
+                $("#orderItemsBody tr").each(function () {
+                    var title = $(this).find('input[name*=\".Title\"]').val();
+                    var qty = parseInt($(this).find('input[name*=\".Quantity\"]').val() || "0");
+
+                    if (title && qty > 0) {
+                        payload.items.push({
+                            title: title,
+                            quantity: qty
+                        });
+                    }
+                });
+
+                if (!payload.orderName) {
+                    alert("Sipariş adı boş olamaz.");
+                    return;
+                }
+
+                if (payload.items.length === 0) {
+                    alert("En az bir ürün eklemelisiniz.");
+                    return;
+                }
+
+                console.log("POST PAYLOAD:", payload);
+
+                $.ajax({
+                    url: "/api/orders",
+                    method: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify(payload),
+                    headers: {
+                        "Authorization": "Bearer " + jwtToken
+                    }
+                }).done(function (res) {
+                    console.log("SAVE OK:", res);
+
+                    if (ordersGrid) {
+                        ordersGrid.refresh();
+                    }
+
+                    // Formu temizle
+                    $("#Input_OrderName").val("");
+                    $("#orderItemsBody").empty();
+                    $("#itemIndex").val("0");
+
+                    alert("Sipariş başarıyla kaydedildi.");
+                }).fail(function (xhr) {
+                    console.error("SAVE ERROR:", xhr);
+                    alert("Sipariş kaydedilemedi. (Status: " + xhr.status + ")");
+                });
+            });
+        }
     </script>
 }
+
+
 
 
