@@ -125,4 +125,3 @@ C:\Users\DB\source\repos\GreenGrocer\greengrocer\obj\Debug\netcoreapp3.1\staticw
 C:\Users\DB\source\repos\GreenGrocer\greengrocer\obj\Debug\netcoreapp3.1\greengrocer.dll
 C:\Users\DB\source\repos\GreenGrocer\greengrocer\obj\Debug\netcoreapp3.1\greengrocer.pdb
 C:\Users\DB\source\repos\GreenGrocer\greengrocer\obj\Debug\netcoreapp3.1\greengrocer.genruntimeconfig.cache
-C:\Users\DB\source\repos\GreenGrocer\greengrocer\obj\Debug\netcoreapp3.1\greengrocer.csproj.AssemblyReference.cache

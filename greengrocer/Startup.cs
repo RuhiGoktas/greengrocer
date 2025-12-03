@@ -67,7 +67,7 @@ namespace greengrocer
 
             services.AddMvc(options =>
             {
-                options.EnableEndpointRouting = false;   
+                options.EnableEndpointRouting = false;
 
                 var policy = new AuthorizationPolicyBuilder()
                     .RequireAuthenticatedUser()
@@ -77,6 +77,7 @@ namespace greengrocer
             services.Configure<LoginOptions>(Configuration.GetSection("LoginOptions"));
             services.AddScoped<IOrderRepository, OrderRepository>();
             services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<IUserService, UserService>();
 
         }
 
@@ -93,20 +94,52 @@ namespace greengrocer
                 // app.UseHsts();
             }
 
-            // 👇 ADD THIS BLOCK
+
             using (var scope = app.ApplicationServices.CreateScope())
             {
                 var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-                db.Database.EnsureCreated();   // <-- creates greengrocerOrdersDb if it doesn't exist
+
+
+                db.Database.EnsureCreated();
+
+
+                db.Database.ExecuteSqlRaw(@"
+            CREATE TABLE IF NOT EXISTS Users (
+                Id        INTEGER PRIMARY KEY AUTOINCREMENT,
+                UserName  TEXT NOT NULL,
+                Password  TEXT NOT NULL,
+                FullName  TEXT NULL,
+                IsActive  INTEGER NOT NULL DEFAULT 1,
+                CreatedAt TEXT NULL
+            );
+
+            CREATE UNIQUE INDEX IF NOT EXISTS IX_Users_UserName
+                ON Users(UserName);
+        ");
+
+
+                if (!db.Users.Any())
+                {
+                    db.Users.Add(new User
+                    {
+                        UserName = "admin",
+                        Password = "123456",
+                        FullName = "System Admin",
+                        IsActive = true
+                    });
+
+                    db.SaveChanges();
+                }
+
+
+                app.UseStaticFiles();
+
+                app.UseAuthentication();
+
+                app.UseMvc();
             }
-            // 👆
-
-            // app.UseHttpsRedirection();
-            app.UseStaticFiles();
-
-            app.UseAuthentication();
-            app.UseMvc();
         }
+
 
 
     }
