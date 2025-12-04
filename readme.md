@@ -48,19 +48,19 @@ Bu proje, hem frontend hem backend becerilerini sergileyen temiz bir örnek uygu
 
 ### 🛒 Sipariş Yönetimi Sayfası
 
-> 💡 Bu görseli repository’ye `screenshots/order-page.png` olarak ekleyip burada gösterebilirsin.
 
 ```
-<img src="screenshots/order-page.png" width="800">
+<img width="1123" height="513" alt="grocer1" src="https://github.com/user-attachments/assets/8fb38148-bd9d-486e-a8ab-54457f88ed96" />
+
 ```
 
 ### 📊 DevExtreme Grid — Sepetteki Siparişler
 
 ```
-<img src="screenshots/devextreme-grid.png" width="800">
+<img width="1197" height="420" alt="grocer2" src="https://github.com/user-attachments/assets/efa9fd42-7377-4297-95d5-0ec64b8e81da" />
+
 ```
 
-(Not: Bu iki görseli bana gönderirsen PNG’leri optimize edip README’ye hazır şekilde ekleyecek formatı da verebilirim.)
 
 ---
 
