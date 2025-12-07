@@ -8,5 +8,6 @@ namespace greengrocer.Repositories
     {
         Task<List<Order>> GetAllWithItemsAsync();
         Task<Order> AddAsync(Order order);
+        Task<string> GetNextOrderNoAsync();
     }
 }

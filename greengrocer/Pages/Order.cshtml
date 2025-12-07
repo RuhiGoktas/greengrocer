@@ -15,11 +15,6 @@
                 </div>
                 <div class="card-body">
                     <form id="orderForm">
-                        <div class="form-group">
-                            <label asp-for="Input.OrderName" class="font-weight-bold"></label>
-                            <input asp-for="Input.OrderName" class="form-control" />
-                            <span asp-validation-for="Input.OrderName" class="text-danger small"></span>
-                        </div>
 
                         <h6 class="mt-3">Order Items</h6>
                         <table class="table table-sm table-bordered mt-2">
@@ -107,124 +102,67 @@
         </div>
 
         <div class="row no-gutters">
-            <!-- Card 1 -->
-            <div class="col-6 col-md-4 col-lg-2 mb-3 pr-2">
-                <div class="product-card">
-                    <img src="~/images/avakado.png" class="img-fluid" alt="Avokado Yerli Adet" />
-                    <div class="font-weight-bold mb-2">Avokado Yerli Adet</div>
-
-                    <div class="product-yellow-strip">
-                        İndirimli
+            <section class="product-strip">
+                <div class="container">
+                    <div class="d-flex justify-content-between align-items-center mb-3 px-1">
+                        <h4 class="product-strip-title mb-0">Meyveler</h4>
+                        <div class="d-flex align-items-center">
+                            <a href="#" class="small mr-3">Tüm Ürünleri Gör</a>
+                            <button type="button" class="btn btn-sm btn-light border mr-1">&larr;</button>
+                            <button type="button" class="btn btn-sm btn-light border">&rarr;</button>
+                        </div>
                     </div>
 
-                    <div class="mb-2">
-                        <span class="product-price-old">49,90 TL</span>
-                        <span class="product-price-new">39,90 TL</span>
-                    </div>
+                    <div class="row no-gutters">
+                        @foreach (var s in Model.Stocks)
+                        {
+                            
+                            var image = "generic-fruit.png";
+                            switch (s.StockId)
+                            {
+                                case 1: image = "avakado.png"; break;
+                                case 2: image = "portakal.png"; break;
+                                case 3: image = "mandalina.png"; break;
+                                case 4: image = "limon.png"; break;
+                                case 5: image = "elma.png"; break;
+                                case 6: image = "muz.png"; break;
+                                case 7: image = "domates.png"; break;
+                                case 8: image = "patates.png"; break;
+                                case 9: image = "soğan.png"; break;
+                                case 10: image = "salatalık.png"; break;
+                            }
 
-                    <button type="button"
-                            class="btn btn-cart text-white btn-block add-to-order"
-                            data-title="Avokado Yerli Adet">
-                        <i class="fas fa-shopping-cart"></i> Sepete Ekle
-                    </button>
+                            <div class="col-6 col-md-4 col-lg-2 mb-3 pr-2">
+                                <div class="product-card">
+                                    <img src="~/images/@image" class="img-fluid" alt="@s.StockName @s.Unit" />
+
+                                    <div class="font-weight-bold mb-2">@s.StockName @s.Unit</div>
+
+                                    <div class="product-yellow-strip">
+                                        İndirimli
+                                    </div>
+
+                                    <div class="mb-2">
+                                        <span class="product-price-old">
+                                            @String.Format("{0:N2} TL", s.Price + 10)   @* örnek eski fiyat *@
+                                        </span>
+                                        <span class="product-price-new">
+                                            @String.Format("{0:N2} TL", s.Price)
+                                        </span>
+                                    </div>
+
+                                    <button type="button"
+                                            class="btn btn-cart text-white btn-block add-to-order"
+                                            data-title="@($"{s.StockName} {s.Unit}")">
+                                        <i class="fas fa-shopping-cart"></i> Sepete Ekle
+                                    </button>
+                                </div>
+                            </div>
+                        }
+                    </div>
                 </div>
-            </div>
+            </section>
 
-            <!-- Card 2 -->
-            <div class="col-6 col-md-4 col-lg-2 mb-3 pr-2">
-                <div class="product-card">
-                    <img src="~/images/portakal.png" class="img-fluid" alt="Washington Portakal kg" />
-
-                    <div class="font-weight-bold mb-2">Washington Portakal kg</div>
-
-                    <div class="product-yellow-strip">
-                        İndirimli
-                    </div>
-
-                    <div class="mb-2">
-                        <span class="product-price-old">69,90 TL</span>
-                        <span class="product-price-new">39,90 TL</span>
-                    </div>
-
-                    <button type="button"
-                            class="btn btn-cart text-white btn-block add-to-order"
-                            data-title="Washington Portakal kg">
-                        <i class="fas fa-shopping-cart"></i> Sepete Ekle
-                    </button>
-                </div>
-            </div>
-
-            <!-- Card 3 -->
-            <div class="col-6 col-md-4 col-lg-2 mb-3 pr-2">
-                <div class="product-card">
-                    <img src="~/images/mandalina.png" class="img-fluid" alt="Mandalina Satsuma İzmir kg" />
-
-                    <div class="font-weight-bold mb-2">Mandalina Satsuma İzmir kg</div>
-
-                    <div class="product-yellow-strip">
-                        İndirimli
-                    </div>
-
-                    <div class="mb-2">
-                        <span class="product-price-old">69,95 TL</span>
-                        <span class="product-price-new">39,90 TL</span>
-                    </div>
-
-                    <button type="button"
-                            class="btn btn-cart text-white btn-block add-to-order"
-                            data-title="Mandalina Satsuma İzmir kg">
-                        <i class="fas fa-shopping-cart"></i> Sepete Ekle
-                    </button>
-                </div>
-            </div>
-
-            <!-- Card 4 -->
-            <div class="col-6 col-md-4 col-lg-2 mb-3 pr-2">
-                <div class="product-card">
-                    <img src="~/images/limon.png" class="img-fluid" alt="Limon Mayer kg" />
-
-                    <div class="font-weight-bold mb-2">Limon Mayer kg</div>
-
-                    <div class="product-yellow-strip">
-                        İndirimli
-                    </div>
-
-                    <div class="mb-2">
-                        <span class="product-price-old">79,90 TL</span>
-                        <span class="product-price-new">49,90 TL</span>
-                    </div>
-
-                    <button type="button"
-                            class="btn btn-cart text-white btn-block add-to-order"
-                            data-title="Limon Mayer kg">
-                        <i class="fas fa-shopping-cart"></i> Sepete Ekle
-                    </button>
-                </div>
-            </div>
-
-            <!-- Card 5 -->
-            <div class="col-6 col-md-4 col-lg-2 mb-3 pr-2">
-                <div class="product-card">
-                    <img src="~/images/mandalina.png" class="img-fluid" alt="Mandalina Satsuma kg" />
-
-                    <div class="font-weight-bold mb-2">Mandalina Satsuma kg</div>
-
-                    <div class="product-yellow-strip">
-                        İndirimli
-                    </div>
-
-                    <div class="mb-2">
-                        <span class="product-price-old">39,90 TL</span>
-                        <span class="product-price-new">24,90 TL</span>
-                    </div>
-
-                    <button type="button"
-                            class="btn btn-cart text-white btn-block add-to-order"
-                            data-title="Mandalina Satsuma kg">
-                        <i class="fas fa-shopping-cart"></i> Sepete Ekle
-                    </button>
-                </div>
-            </div>
         </div>
     </div>
 </section>
@@ -301,12 +239,11 @@
             // DevExtreme grid
             ordersGrid = $("#dxOrdersGrid").dxDataGrid({
                 dataSource: DevExpress.data.AspNet.createStore({
-                    key: "id",
+                    key: "orderId", 
                     loadUrl: "/api/orders",
                     onBeforeSend: function (method, ajaxOptions) {
                         ajaxOptions.headers = ajaxOptions.headers || {};
                         ajaxOptions.headers["Authorization"] = "Bearer " + jwtToken;
-                        console.log("onBeforeSend →", method, ajaxOptions.headers);
                     }
                 }),
                 showBorders: true,
@@ -315,14 +252,16 @@
                 searchPanel: { visible: true },
                 sorting: { mode: "multiple" },
                 columns: [
-                    { dataField: "orderName", caption: "Sipariş Adı" },
-                    { dataField: "totalQty", caption: "Toplam Miktar" },
+                    { dataField: "orderNo", caption: "Sipariş No" },
+                    { dataField: "orderDate", caption: "Tarih", dataType: "date" },
+                    { dataField: "totalPrice", caption: "Tutar", format: "currency" },
                     {
                         dataField: "itemsText",
                         caption: "İçindekiler"
                     }
                 ]
             }).dxDataGrid("instance");
+
 
             hookSaveButton();
         });
@@ -335,13 +274,15 @@
                 }
 
                 var payload = {
-                    orderName: $("#Input_OrderName").val(),
+                    customerId: 1,          
+                    deliveryAddressId: 1,
+                    invoiceAddressId: 1,
                     items: []
                 };
 
                 $("#orderItemsBody tr").each(function () {
-                    var title = $(this).find('input[name*=\".Title\"]').val();
-                    var qty = parseInt($(this).find('input[name*=\".Quantity\"]').val() || "0");
+                    var title = $(this).find('input[name*=".Title"]').val();
+                    var qty = parseInt($(this).find('input[name*=".Quantity"]').val() || "0");
 
                     if (title && qty > 0) {
                         payload.items.push({
@@ -351,10 +292,6 @@
                     }
                 });
 
-                if (!payload.orderName) {
-                    alert("Sipariş adı boş olamaz.");
-                    return;
-                }
 
                 if (payload.items.length === 0) {
                     alert("En az bir ürün eklemelisiniz.");

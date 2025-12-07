@@ -19,7 +19,6 @@ namespace greengrocer.Controllers
             _service = service;
         }
 
-        // GET: /api/orders
         [HttpGet]
         public async Task<IActionResult> GetOrders()
         {
@@ -27,7 +26,6 @@ namespace greengrocer.Controllers
             return Ok(data);
         }
 
-        // POST: /api/orders
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] OrderCreateDto dto)
         {
@@ -38,4 +36,5 @@ namespace greengrocer.Controllers
             return Ok(result);
         }
     }
+
 }

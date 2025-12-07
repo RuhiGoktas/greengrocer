@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\DB\\source\\repos\\GreenGrocer\\greengrocer\\greengrocer.csproj": {}
+    "C:\\Users\\DB\\source\\repos\\GreenGrocer2\\greengrocer\\greengrocer\\greengrocer.csproj": {}
   },
   "projects": {
-    "C:\\Users\\DB\\source\\repos\\GreenGrocer\\greengrocer\\greengrocer.csproj": {
+    "C:\\Users\\DB\\source\\repos\\GreenGrocer2\\greengrocer\\greengrocer\\greengrocer.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\DB\\source\\repos\\GreenGrocer\\greengrocer\\greengrocer.csproj",
+        "projectUniqueName": "C:\\Users\\DB\\source\\repos\\GreenGrocer2\\greengrocer\\greengrocer\\greengrocer.csproj",
         "projectName": "greengrocer",
-        "projectPath": "C:\\Users\\DB\\source\\repos\\GreenGrocer\\greengrocer\\greengrocer.csproj",
+        "projectPath": "C:\\Users\\DB\\source\\repos\\GreenGrocer2\\greengrocer\\greengrocer\\greengrocer.csproj",
         "packagesPath": "C:\\Users\\DB\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\DB\\source\\repos\\GreenGrocer\\greengrocer\\obj\\",
+        "outputPath": "C:\\Users\\DB\\source\\repos\\GreenGrocer2\\greengrocer\\greengrocer\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"

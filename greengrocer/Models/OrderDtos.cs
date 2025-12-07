@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace greengrocer.Models
@@ -11,12 +12,31 @@ namespace greengrocer.Models
         [Range(1, 9999)]
         public int Quantity { get; set; }
     }
+    public class OrderListItemDto
+    {
+        public int OrderId { get; set; }
+        public string OrderNo { get; set; }
+        public DateTime OrderDate { get; set; }
+        public decimal TotalPrice { get; set; }
+
+        public string ItemsText { get; set; }   
+        public List<OrderItemDto> Items { get; set; }
+    }
+
+    public class OrderCreateItemDto
+    {
+        public string Title { get; set; }
+        public int Quantity { get; set; }
+    }
 
     public class OrderCreateDto
     {
-        [Required]
-        public string OrderName { get; set; }
+        // Şimdilik Customer / Address sabit de verilebilir
+        public int CustomerId { get; set; } = 1;
+        public int DeliveryAddressId { get; set; } = 1;
+        public int InvoiceAddressId { get; set; } = 1;
 
-        public List<OrderItemDto> Items { get; set; } = new List<OrderItemDto>();
+        public List<OrderCreateItemDto> Items { get; set; } 
     }
+
 }

@@ -1,8 +1,10 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Threading.Tasks;
 using greengrocer.Data;
 using greengrocer.Models;
+using greengrocer.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -14,16 +16,21 @@ namespace greengrocer.Pages
     public class OrderModel : PageModel
     {
         private readonly AppDbContext _db;
+        private readonly IOrderService _orderService;
 
-        public OrderModel(AppDbContext db)
+
+        public OrderModel(AppDbContext db, IOrderService orderService)
         {
             _db = db;
+            _orderService = orderService;
         }
 
         [BindProperty]
         public OrderInput Input { get; set; }
 
-        public List<Order> ExistingOrders { get; set; }
+        public List<OrderListItemDto> ExistingOrders { get; set; }
+
+        public List<Stock> Stocks { get; set; }
 
         public string Message { get; set; }
 
@@ -45,34 +52,25 @@ namespace greengrocer.Pages
             public List<OrderItemInput> Items { get; set; } = new List<OrderItemInput>();
         }
 
-        public void OnGet()
+        public async Task OnGetAsync()
         {
+          
             Input = new OrderInput
             {
                 Items = new List<OrderItemInput>()
             };
 
-            ExistingOrders = _db.Orders
-                .Include(o => o.Items)
-                .ToList();
+            
+            ExistingOrders = await _orderService.GetAllAsync(); 
+
+            Stocks = await _db.Stocks
+                .Where(s => s.IsActive)
+                .OrderBy(s => s.StockId)
+                .ToListAsync();
         }
 
-        public void OnPost()
-        {
 
-        }
 
-        private OrderInput CreateEmptyOrder()
-        {
-            return new OrderInput
-            {
-                Items = new List<OrderItemInput>
-                {
-                    new OrderItemInput(),
-                    new OrderItemInput(),
-                    new OrderItemInput()
-                }
-            };
-        }
+       
     }
 }

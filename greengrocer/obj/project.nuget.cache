@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "ifGanvl7Dp/THvynrvVRGaI3JrEtNJIcRLKeLJ7jfXA+cs1K3Ue5fKwCpZGkVN1FqPjs/PiLxpzovVEaVOY4qA==",
+  "dgSpecHash": "SF2ztqVL4LNpmWctxtEt70iTzK3tTMfKKZE1J6VlMrQ+iNFjhyPyltgWNbmUQUz73tZLoL1QM1tvD36+aShmtg==",
   "success": true,
-  "projectFilePath": "C:\\Users\\DB\\source\\repos\\GreenGrocer\\greengrocer\\greengrocer.csproj",
+  "projectFilePath": "C:\\Users\\DB\\source\\repos\\GreenGrocer2\\greengrocer\\greengrocer\\greengrocer.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\DB\\.nuget\\packages\\microsoft.aspnetcore.authentication\\2.3.0\\microsoft.aspnetcore.authentication.2.3.0.nupkg.sha512",
     "C:\\Users\\DB\\.nuget\\packages\\microsoft.aspnetcore.authentication.abstractions\\2.3.0\\microsoft.aspnetcore.authentication.abstractions.2.3.0.nupkg.sha512",
