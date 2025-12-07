@@ -1,0 +1,72 @@
+Washington Portakal alan müþteriler ve adres listesi.
+SELECT DISTINCT
+    c.CustomerName,
+    ca.City,
+    ca.Town,
+    ca.Address
+FROM OrderDetail od
+JOIN [Order] o   ON o.OrderId = od.OrderId
+JOIN Customer c  ON c.CustomerId = o.CustomerId
+JOIN CustomerAddress ca ON ca.CustomerId = c.CustomerId
+JOIN Stock s     ON s.StockId = od.StockId
+WHERE s.StockName = 'Washington Portakal'
+  AND c.IsActive = 1
+  AND ca.IsActive = 1;
+/**************************************************************************/
+Sipariþteki ürün miktarý 1’den büyük olan müþteriler ve sipariþ detaylarý
+SELECT
+    o.OrderId,
+    o.OrderNo,
+    o.OrderDate,
+    c.CustomerName,
+    s.StockName,
+    od.Amount
+FROM OrderDetail od
+JOIN [Order] o   ON o.OrderId = od.OrderId
+JOIN Customer c  ON c.CustomerId = o.CustomerId
+JOIN Stock s     ON s.StockId = od.StockId
+WHERE od.Amount > 1;
+/*************************************************************************/
+
+
+Fatura adresi ve teslimat adresi ayný olmayan müþteri listesi
+SELECT DISTINCT
+    c.CustomerId,
+    c.CustomerName
+FROM [Order] o
+JOIN Customer c           ON c.CustomerId = o.CustomerId
+JOIN CustomerAddress inv  ON inv.AddressId = o.InvoiceAddressId
+JOIN CustomerAddress del  ON del.AddressId = o.DeliveryAddressId
+WHERE c.IsActive = 1
+  AND inv.IsActive = 1
+  AND del.IsActive = 1
+  AND (
+        IFNULL(inv.Country,   '') <> IFNULL(del.Country,   '')
+     OR IFNULL(inv.City,      '') <> IFNULL(del.City,      '')
+     OR IFNULL(inv.Town,      '') <> IFNULL(del.Town,      '')
+     OR IFNULL(inv.Address,   '') <> IFNULL(del.Address,   '')
+     OR IFNULL(inv.PostalCode,'') <> IFNULL(del.PostalCode,'')
+  );
+/********************************************************/
+Müþteri adý “TLS” olan müþterinin sipariþlerinin listesi
+SELECT
+    o.OrderId,
+    o.OrderNo,
+    o.OrderDate,
+    o.TotalPrice,
+    c.CustomerName
+FROM [Order] o
+JOIN Customer c ON c.CustomerId = o.CustomerId
+WHERE c.CustomerName LIKE 'TLS%';   
+
+
+/**************************************************************/
+Ýstanbul þehrine ait kaç sipariþ var?
+
+
+SELECT COUNT(*) AS IstanbulOrderCount
+FROM [Order] o
+JOIN CustomerAddress ca
+    ON ca.AddressId = o.DeliveryAddressId
+WHERE ca.City = 'Ýstanbul';
+
